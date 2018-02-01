@@ -7,6 +7,8 @@ const tumblr = require('tumblr.js');
 const GitHub = require('github');
 const Twit = require('twit');
 const stripe = require('stripe')(process.env.STRIPE_SKEY);
+
+/*
 const twilio = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
 const Linkedin = require('node-linkedin')(process.env.LINKEDIN_ID, process.env.LINKEDIN_SECRET, process.env.LINKEDIN_CALLBACK_URL);
 const clockwork = require('clockwork')({ key: process.env.CLOCKWORK_KEY });
@@ -23,6 +25,7 @@ const foursquare = require('node-foursquare')({
 
 foursquare.Venues = bluebird.promisifyAll(foursquare.Venues);
 foursquare.Users = bluebird.promisifyAll(foursquare.Users);
+*/
 
 /**
  * GET /api
