@@ -1,12 +1,12 @@
 const bluebird = require('bluebird');
 const request = bluebird.promisifyAll(require('request'), { multiArgs: true });
 const cheerio = require('cheerio');
-const graph = require('fbgraph');
-const LastFmNode = require('lastfm').LastFmNode;
-const tumblr = require('tumblr.js');
-const GitHub = require('github');
-const Twit = require('twit');
-const stripe = require('stripe')(process.env.STRIPE_SKEY);
+//const graph = require('fbgraph');
+//const LastFmNode = require('lastfm').LastFmNode;
+//const tumblr = require('tumblr.js');
+//const GitHub = require('github');
+//const Twit = require('twit');
+//const stripe = require('stripe')(process.env.STRIPE_SKEY);
 
 /*
 const twilio = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN);
@@ -337,6 +337,7 @@ exports.getSteam = (req, res, next) => {
  * GET /api/stripe
  * Stripe API example.
  */
+
 exports.getStripe = (req, res) => {
   res.render('api/stripe', {
     title: 'Stripe API',
@@ -344,10 +345,12 @@ exports.getStripe = (req, res) => {
   });
 };
 
+
 /**
  * POST /api/stripe
  * Make a payment.
  */
+
 exports.postStripe = (req, res) => {
   const stripeToken = req.body.stripeToken;
   const stripeEmail = req.body.stripeEmail;
@@ -365,6 +368,8 @@ exports.postStripe = (req, res) => {
     res.redirect('/api/stripe');
   });
 };
+
+
 
 /**
  * GET /api/twilio
