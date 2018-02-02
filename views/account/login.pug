@@ -1,10 +1,21 @@
 extends ../layout
 
+block page-variables
+  - var hideHeader = true
+
 block content
   .page-header
     h3 Sign in
   form.form-horizontal(method='POST')
     input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      .col-sm-offset-3.col-sm-7
+        a.btn.btn-block.btn-strava.btn-social(href='/auth/strava')
+        //  i.fa.fa-strava
+          // | Sign in with Strava
+    .form-group
+      .col-sm-offset-3.col-sm-7
+        hr
     .form-group
       label.col-sm-3.control-label(for='email') Email
       .col-sm-7
@@ -19,11 +30,4 @@ block content
           i.fa.fa-user
           | Login
         a.btn.btn-link(href='/forgot') Forgot your password?
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        hr
-    .form-group
-      .col-sm-offset-3.col-sm-7
-        a.btn.btn-block.btn-strava.btn-social(href='/auth/strava')
-          i.fa.fa-strava
-          | Sign in with Strava
+    
