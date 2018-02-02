@@ -110,6 +110,18 @@ exports.postSignup = (req, res, next) => {
 };
 
 /**
+ * GET /success
+ * Authentication success page.
+ */
+exports.getSuccess = (req, res) => {
+  res.render('account/success', {
+    title: 'Success'
+  });
+};
+
+
+
+/**
  * GET /account
  * Profile page.
  */
@@ -118,6 +130,8 @@ exports.getAccount = (req, res) => {
     title: 'Account Management'
   });
 };
+
+
 
 /**
  * POST /account/profile

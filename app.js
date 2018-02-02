@@ -108,12 +108,19 @@ app.use((req, res, next) => {
       !req.path.match(/\./)) {
     req.session.returnTo = req.path;
   } else if (req.user &&
-      req.path === '/account') {
-    req.session.returnTo = req.path;
+      //req.path === '/account') {
+      req.path === '/account/success') {  // MM VV
+        req.session.returnTo = req.path;
   }
   next();
 });
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+
+// MM log router activity - see http://jilles.me/express-routing-the-beginners-guide/   
+// app._router.all('/', function (req, res, next) {  
+//   console.log('Someone made a request!');
+//   next();
+// });
 
 /**
  * Primary app routes.
@@ -135,6 +142,7 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+app.get('/account/success', passportConfig.isAuthenticated,userController.getSuccess); // MM VV
 
 /**
  * API examples routes.
@@ -175,7 +183,8 @@ app.get('/api/google-maps', apiController.getGoogleMaps);
 
 app.get('/auth/strava', passport.authenticate('strava')); // VV
 app.get('/auth/strava/callback', passport.authenticate('strava', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+  //res.redirect(req.session.returnTo || '/');
+  res.redirect('/account/success');
 });
 
 /**
