@@ -53,6 +53,8 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
  */
 
 
+// callbackURL: '/auth/strava/callback',
+//   callbackURL: "http://127.0.0.1:8080/auth/strava/callback",
 
 /**
  * Sign in with Strava
@@ -60,8 +62,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, don
 passport.use(new StravaStrategy({
   clientID: process.env.STRAVA_CLIENT_ID,
   clientSecret: process.env.STRAVA_CLIENT_SECRET,
-  // callbackURL: '/auth/strava/callback',
-  callbackURL: "http://127.0.0.1:8080/auth/strava/callback",
+  callbackURL: "/auth/strava/callback",
   passReqToCallback: true
 }, 
 (req, accessToken, refreshToken, profile, done) => {

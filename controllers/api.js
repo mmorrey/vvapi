@@ -338,12 +338,12 @@ exports.getSteam = (req, res, next) => {
  * Stripe API example.
  */
 
-exports.getStripe = (req, res) => {
-  res.render('api/stripe', {
-    title: 'Stripe API',
-    publishableKey: process.env.STRIPE_PKEY
-  });
-};
+// exports.getStripe = (req, res) => {
+//   res.render('api/stripe', {
+//     title: 'Stripe API',
+//     publishableKey: process.env.STRIPE_PKEY
+//   });
+// };
 
 
 /**
@@ -351,23 +351,23 @@ exports.getStripe = (req, res) => {
  * Make a payment.
  */
 
-exports.postStripe = (req, res) => {
-  const stripeToken = req.body.stripeToken;
-  const stripeEmail = req.body.stripeEmail;
-  stripe.charges.create({
-    amount: 395,
-    currency: 'usd',
-    source: stripeToken,
-    description: stripeEmail
-  }, (err) => {
-    if (err && err.type === 'StripeCardError') {
-      req.flash('errors', { msg: 'Your card has been declined.' });
-      return res.redirect('/api/stripe');
-    }
-    req.flash('success', { msg: 'Your card has been successfully charged.' });
-    res.redirect('/api/stripe');
-  });
-};
+// exports.postStripe = (req, res) => {
+//   const stripeToken = req.body.stripeToken;
+//   const stripeEmail = req.body.stripeEmail;
+//   stripe.charges.create({
+//     amount: 395,
+//     currency: 'usd',
+//     source: stripeToken,
+//     description: stripeEmail
+//   }, (err) => {
+//     if (err && err.type === 'StripeCardError') {
+//       req.flash('errors', { msg: 'Your card has been declined.' });
+//       return res.redirect('/api/stripe');
+//     }
+//     req.flash('success', { msg: 'Your card has been successfully charged.' });
+//     res.redirect('/api/stripe');
+//   });
+// };
 
 
 
@@ -566,16 +566,16 @@ exports.getLob = (req, res, next) => {
  * File Upload API example.
  */
 
-exports.getFileUpload = (req, res) => {
-  res.render('api/upload', {
-    title: 'File Upload'
-  });
-};
+// exports.getFileUpload = (req, res) => {
+//   res.render('api/upload', {
+//     title: 'File Upload'
+//   });
+// };
 
-exports.postFileUpload = (req, res) => {
-  req.flash('success', { msg: 'File was uploaded successfully.' });
-  res.redirect('/api/upload');
-};
+// exports.postFileUpload = (req, res) => {
+//   req.flash('success', { msg: 'File was uploaded successfully.' });
+//   res.redirect('/api/upload');
+// };
 
 /**
  * GET /api/pinterest

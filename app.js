@@ -1,4 +1,11 @@
 /**
+ * Load environment variables from .env file, where API keys and passwords are configured.
+ */
+const dotenv = require('dotenv');
+dotenv.load({ path: '.env' });
+
+
+/**
  * Module dependencies.
  */
 const express = require('express');
@@ -9,7 +16,6 @@ const logger = require('morgan');
 const chalk = require('chalk');
 const errorHandler = require('errorhandler');
 const lusca = require('lusca');
-const dotenv = require('dotenv');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('express-flash');
 const path = require('path');
@@ -20,12 +26,9 @@ const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+//const upload = multer({ dest: path.join(__dirname, 'uploads') });  // remove uploads -- see https://github.com/zeit/now-cli/issues/347
 
-/**
- * Load environment variables from .env file, where API keys and passwords are configured.
- */
-dotenv.load({ path: '.env' });
+
 
 /**
  * Controllers (route handlers).
@@ -40,10 +43,17 @@ const contactController = require('./controllers/contact');
  */
 const passportConfig = require('./config/passport');
 
+
+// Zeit fixes?  See https://github.com/zeit/now-cli/issues/175#issuecomment-346182206
+//const dev = process.env.NODE_ENV === 'development';
+// const app = next({ dev });
+
 /**
  * Create Express server.
  */
 const app = express();
+
+
 
 /**
  * Connect to MongoDB.
@@ -87,11 +97,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
-    next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
+  // if (req.path === '/api/upload') {
+  //   next();
+  // } else {
+  //   lusca.csrf()(req, res, next);
+  // }
+  lusca.csrf()(req, res, next); // MM VV removed uploads
 });
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
@@ -147,42 +158,42 @@ app.get('/account/success', passportConfig.isAuthenticated,userController.getSuc
 /**
  * API examples routes.
  */
-app.get('/api', apiController.getApi);
-app.get('/api/lastfm', apiController.getLastfm);
-app.get('/api/nyt', apiController.getNewYorkTimes);
-app.get('/api/aviary', apiController.getAviary);
-app.get('/api/steam', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getSteam);
-app.get('/api/stripe', apiController.getStripe);
-app.post('/api/stripe', apiController.postStripe);
-app.get('/api/scraping', apiController.getScraping);
-app.get('/api/twilio', apiController.getTwilio);
-app.post('/api/twilio', apiController.postTwilio);
-app.get('/api/clockwork', apiController.getClockwork);
-app.post('/api/clockwork', apiController.postClockwork);
-app.get('/api/foursquare', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFoursquare);
-app.get('/api/tumblr', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getTumblr);
-app.get('/api/facebook', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
-app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
-app.get('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getTwitter);
-app.post('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postTwitter);
-app.get('/api/linkedin', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getLinkedin);
-app.get('/api/instagram', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getInstagram);
-app.get('/api/paypal', apiController.getPayPal);
-app.get('/api/paypal/success', apiController.getPayPalSuccess);
-app.get('/api/paypal/cancel', apiController.getPayPalCancel);
-app.get('/api/lob', apiController.getLob);
-app.get('/api/upload', apiController.getFileUpload);
-app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
-app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);
-app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
-app.get('/api/google-maps', apiController.getGoogleMaps);
+// app.get('/api', apiController.getApi);
+// app.get('/api/lastfm', apiController.getLastfm);
+// app.get('/api/nyt', apiController.getNewYorkTimes);
+// app.get('/api/aviary', apiController.getAviary);
+// app.get('/api/steam', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getSteam);
+// app.get('/api/stripe', apiController.getStripe);
+// app.post('/api/stripe', apiController.postStripe);
+// app.get('/api/scraping', apiController.getScraping);
+// app.get('/api/twilio', apiController.getTwilio);
+// app.post('/api/twilio', apiController.postTwilio);
+// app.get('/api/clockwork', apiController.getClockwork);
+// app.post('/api/clockwork', apiController.postClockwork);
+// app.get('/api/foursquare', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFoursquare);
+// app.get('/api/tumblr', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getTumblr);
+// app.get('/api/facebook', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getFacebook);
+// app.get('/api/github', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getGithub);
+// app.get('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getTwitter);
+// app.post('/api/twitter', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postTwitter);
+// app.get('/api/linkedin', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getLinkedin);
+// app.get('/api/instagram', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getInstagram);
+// app.get('/api/paypal', apiController.getPayPal);
+// app.get('/api/paypal/success', apiController.getPayPalSuccess);
+// app.get('/api/paypal/cancel', apiController.getPayPalCancel);
+// app.get('/api/lob', apiController.getLob);
+// //app.get('/api/upload', apiController.getFileUpload);
+// //app.post('/api/upload', upload.single('myFile'), apiController.postFileUpload);
+// app.get('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.getPinterest);
+// app.post('/api/pinterest', passportConfig.isAuthenticated, passportConfig.isAuthorized, apiController.postPinterest);
+// app.get('/api/google-maps', apiController.getGoogleMaps);
 
 /**
  * OAuth authentication routes. (Sign in)
  */
 
 app.get('/auth/strava', passport.authenticate('strava')); // VV
-app.get('/auth/strava/callback', passport.authenticate('strava', { failureRedirect: '/login' }), (req, res) => {
+app.get('/auth/strava/callback', passport.authenticate('strava', { failureRedirect: '/account/failed' }), (req, res) => {
   //res.redirect(req.session.returnTo || '/');
   res.redirect('/account/success');
 });
