@@ -73,6 +73,8 @@ app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// Application Middleware functions - https://expressjs.com/en/guide/using-middleware.html
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
@@ -110,22 +112,28 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
-app.use((req, res, next) => {
-  // After successful login, redirect back to the intended page
+
+// Blocking access to secure pages for unauthenticated users  
+// checking req.path, which is stripped to sub-path by .use() method - https://www.safaribooksonline.com/blog/2014/03/10/express-js-middleware-demystified/
+app.use((req, res, next) => { 
   if (!req.user &&
       req.path !== '/login' &&
       req.path !== '/signup' &&
       !req.path.match(/^\/auth/) &&
       !req.path.match(/\./)) {
     req.session.returnTo = req.path;
-  } else if (req.user &&
+  } else if (req.user &&  //  but not sure the point of this bit
       //req.path === '/account') {
       req.path === '/account/success') {  // MM VV
         req.session.returnTo = req.path;
   }
   next();
 });
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+
+// force default to text/html mime type, https://stackoverflow.com/questions/18860752/how-do-i-make-every-file-in-a-static-dir-have-content-type-using-express
+express.static.mime.default_type = "text/html";
+// static path configured - see https://expressjs.com/en/resources/middleware/serve-static.html
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000, extensions:['html', 'htm'] }));
 
 // MM log router activity - see http://jilles.me/express-routing-the-beginners-guide/   
 // app._router.all('/', function (req, res, next) {  
@@ -192,10 +200,12 @@ app.get('/account/success', passportConfig.isAuthenticated,userController.getSuc
  * OAuth authentication routes. (Sign in)
  */
 
-app.get('/auth/strava', passport.authenticate('strava')); // VV
+app.get('/auth/strava', passport.authenticate('strava')); // VV MM
 app.get('/auth/strava/callback', passport.authenticate('strava', { failureRedirect: '/account/failed' }), (req, res) => {
-  //res.redirect(req.session.returnTo || '/');
-  res.redirect('/account/success');
+  // res.redirect(req.session.returnTo || '/');
+  // res.redirect('/account/success'); // MM need to change to account for presence of redirect_uri
+  res.redirect(req.session.returnTo || '/account/success');
+  
 });
 
 /**

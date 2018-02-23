@@ -110,7 +110,7 @@ exports.postSignup = (req, res, next) => {
 };
 
 /**
- * GET /success
+ * GET /success  MM VV 
  * Authentication success page.
  */
 exports.getSuccess = (req, res) => {
@@ -119,6 +119,15 @@ exports.getSuccess = (req, res) => {
   });
 };
 
+/**
+ * GET /success  MM VV 
+ * Authentication failure page.
+ */
+exports.getSuccess = (req, res) => {
+  res.render('account/failed', {
+    title: 'Failed'
+  });
+};
 
 
 /**

@@ -6,7 +6,14 @@
     'none';script-src 'unsafe-inline';">
 </head>
 <body>
-    <script>window.location.assign('komwiththewind://token' +
-    window.location.hash);</script>
+    <script>
+    //var bbc = 'http://www.bbc.co.uk'+ window.location.hash;
+    //alert('New URL will be:' + bbc);
+    //window.location.href=bbc;
+    //window.location.assign('komwiththewind://token' + window.location.hash);
+    var kom = 'komwiththewind://token' + window.location.hash;
+    alert('New URL will be:' + kom);
+    window.location.href=kom;
+    </script>
 </body>
 </html>
